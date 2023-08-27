@@ -40,7 +40,7 @@ I use this script as an opportinity to brush up my (admittedly lousy) Python cod
 My final goal is to be able to visualize these metrics in a [Home Assistant Dashboard](https://www.home-assistant.io/dashboards/), but this requires a number of additional steps that I need to learn more about:
 
 - [ ] Convert the script to use object oriented programming paradigms
-- [ ] Convert the script into a proper Python module
+- [ ] Convert the script into a proper Python module/package
 - [ ] Publish the Python Module on the [Python Package Index](https://pypi.org/)
 - [ ] Create a [Home Assistant Integration](https://www.home-assistant.io/integrations/) that uses the module
 
@@ -48,6 +48,7 @@ If you have any experience in performing these steps, I gladly accept pull reque
 
 Some other project/resources to study in order to achieve this goal include:
 
+* [tsun-talent-monitoring](https://github.com/asciidisco/tsun-talent-monitoring) by [@asciidisco](https://github.com/asciidisco) - a Node.js project / Docker container that pulls data from Talent Monitoring cloud and converts it into a digestible JSON structure for consumption via HTTP/REST
 * [pyAdax](https://github.com/Danielhiversen/pyAdax) by [@Danielhiversen](https://github.com/Danielhiversen/)
 
 ## LICENSE
