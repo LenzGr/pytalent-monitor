@@ -85,7 +85,9 @@ if __name__ == "__main__":
             print(f"Daily energy (Wh): {dayEnergy}")
             monthEnergy = data['data']['monthEnergy']
             print(f"Monthly energy (Wh): {monthEnergy}")
-    
+            yearEnergy = data['data']['yearEnergy']
+            print(f"Yearly energy (Wh): {yearEnergy}")
+                
         data = get_data(endpoint="system/station/selectLayoutComponents?powerStationGuid="+powerStationGuid)
         if data:
             pv1Voltage = data['data']['components'][0]['pv1Voltage']

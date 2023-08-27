@@ -21,10 +21,10 @@ Example Output:
 ./talent-monitoring.py -u user@example.com -p password
 Status: ready
 Station Name: priwatt priWall duo
-GUID: 13147bf1-0d11-11ee-8469-00163e00342d
 Total Active Power (W): 184.0
 Daily energy (Wh): 410.0
 Monthly energy (Wh): 45250.0
+Yearly energy (Wh): 94950.0
 Panel1 Voltage (V): 33.3
 Panel1 Current (A): 2.19
 Panel1 Power (W): 73.2
