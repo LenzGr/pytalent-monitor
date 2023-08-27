@@ -35,18 +35,19 @@ Panel2 Power (W): 67.8
 
 ## Next Steps
 
-I use this script as an opportinity to brush up my (admittedly lousy) Python coding skills and learn more about connecting to REST APIs.
+I use this script as an opportunity to brush up on my (admittedly lousy) Python coding skills and learn more about connecting to REST APIs.
 
 My final goal is to be able to visualize these metrics in a [Home Assistant Dashboard](https://www.home-assistant.io/dashboards/), but this requires a number of additional steps that I need to learn more about:
 
-- [ ] Convert the script to use object oriented programming paradigms
-- [ ] Convert the script into a proper Python module/package
+- [ ] [Add more useful values to the output](https://github.com/LenzGr/talent-monitoring/issues/2)
+- [ ] [Convert the script to use object-oriented programming paradigms](https://github.com/LenzGr/talent-monitoring/issues/1)
+- [ ] [Convert the script into a proper Python module/package](https://github.com/LenzGr/talent-monitoring/issues/3)
 - [ ] Publish the Python Module on the [Python Package Index](https://pypi.org/)
 - [ ] Create a [Home Assistant Integration](https://www.home-assistant.io/integrations/) that uses the module
 
 If you have any experience in performing these steps, I gladly accept pull requests and suggestions!
 
-Some other project/resources to study in order to achieve this goal include:
+Some other projects/resources to study in order to achieve this goal include:
 
 * [tsun-talent-monitoring](https://github.com/asciidisco/tsun-talent-monitoring) by [@asciidisco](https://github.com/asciidisco) - a Node.js project / Docker container that pulls data from Talent Monitoring cloud and converts it into a digestible JSON structure for consumption via HTTP/REST
 * [pyAdax](https://github.com/Danielhiversen/pyAdax) by [@Danielhiversen](https://github.com/Danielhiversen/)
