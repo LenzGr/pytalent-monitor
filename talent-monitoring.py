@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import argparse
+import json
 import logging
 import os
 import requests
@@ -15,18 +16,19 @@ class AuthenticationError(Exception):
     pass
 
 def get_credentials():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Talent Monitoring Script")
     parser.add_argument('-u', '--username', required=False, help="Username to log in")
     parser.add_argument('-p', '--password', required=False, help="Password to log in")
+    parser.add_argument('--json', action='store_true', help="Return output as JSON object")
     args = parser.parse_args()
 
     if args.username and args.password:
-        return args.username, args.password
+        return args.username, args.password, args.json
 
-    username_env = os.environ.get('TALENT_USERNAME')
-    password_env = os.environ.get('TALENT_PASSWORD')
-    if username_env and password_env:
-        return username_env, password_env
+    username = args.username or os.environ.get('TALENT_USERNAME')
+    password = args.password or os.environ.get('TALENT_PASSWORD')
+    if username and password:
+        return username, password, args.json
 
     raise ValueError("Credentials not provided via command line arguments or environment variables.")
 
@@ -67,16 +69,14 @@ def get_data(endpoint, token):
         return None
 
 if __name__ == "__main__":
-    username, password = get_credentials()
+    username, password, return_json = get_credentials()
     token = login(username, password)
 
     data = get_data(endpoint="system/station/list", token=token)
     if data:
         first_station = data['rows'][0]
         status = first_station['status']
-        print(f"Status: {status}")
         stationName = first_station['stationName']
-        print(f"Station Name: {stationName}")
         powerStationGuid = first_station['powerStationGuid']
         logging.debug("GUID: %s", powerStationGuid)
 
@@ -84,26 +84,39 @@ if __name__ == "__main__":
         if data:
             power_data = data['data']
             totalActivePower = power_data['totalActivePower']
-            print(f"Total Active Power (W): {totalActivePower}")
             dayEnergy = power_data['dayEnergy']
-            print(f"Daily energy (Wh): {dayEnergy}")
             monthEnergy = power_data['monthEnergy']
-            print(f"Monthly energy (Wh): {monthEnergy}")
             yearEnergy = power_data['yearEnergy']
-            print(f"Yearly energy (Wh): {yearEnergy}")
 
         data = get_data(endpoint=f"system/station/selectLayoutComponents?powerStationGuid={powerStationGuid}", token=token)
         if data:
             components = data['data']['components'][0]
             pv1Voltage = components['pv1Voltage']
-            print(f"Panel1 Voltage (V): {pv1Voltage}")
             pv1Current = components['pv1Current']
-            print(f"Panel1 Current (A): {pv1Current}")
             pv1Power = components['pv1Power']
-            print(f"Panel1 Power (W): {pv1Power}")
             pv2Voltage = components['pv2Voltage']
-            print(f"Panel2 Voltage (V): {pv2Voltage}")
             pv2Current = components['pv2Current']
-            print(f"Panel2 Current (A): {pv2Current}")
             pv2Power = components['pv2Power']
-            print(f"Panel2 Power (W): {pv2Power}")
+
+        # Create a dictionary to store the results
+        result = {
+            "Status": status,
+            "StationName": stationName,
+            "TotalActivePower(W)": totalActivePower,
+            "DailyEnergy(Wh)": dayEnergy,
+            "MonthlyEnergy(Wh)": monthEnergy,
+            "YearlyEnergy(Wh)": yearEnergy,
+            "Panel1Voltage(V)": pv1Voltage,
+            "Panel1Current(A)": pv1Current,
+            "Panel1Power(W)": pv1Power,
+            "Panel2Voltage(V)": pv2Voltage,
+            "Panel2Current(A)": pv2Current,
+            "Panel2Power(W)": pv2Power,
+        }
+
+        # Print or return the result as JSON
+        if return_json:
+            print(json.dumps(result, indent=4))
+        else:
+            for key, value in result.items():
+                print(f"{key}: {value}")
