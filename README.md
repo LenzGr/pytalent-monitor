@@ -1,10 +1,10 @@
-# Talent Monitoring - Gathering data from the www.talent-monitoring.com REST API
+# pyTalent Monitor - Gather data from the www.talent-monitoring.com REST API
 
 ## Motivation
 
 Our small home PV (a [priWatt priWall Duo](https://priwatt.de/stecker-solaranlagen/fassade/priwall-duo/SW10354.1)) came with a Tsuness TSOL-MS800 inverter that only shares its metrics with a proprietary cloud service hosted on https://www.talent-monitoring.com/. We either need to use their web application or a mobile app to understand how our solar power plant is performing.
 
-`talent-monitoring.py` is a simple Python script that I hacked together to explore the Talent Monitoring REST API that is used by the vendor's mobile and web applications.
+`pytalent-monitor.py` is a simple Python script that I hacked together to explore the Talent Monitoring REST API that is used by the vendor's mobile and web applications.
 
 **Note: This software is not affiliated with or supported by Tsuness or any other company involved in this product.**
 
@@ -14,11 +14,11 @@ I used the [Network Monitor](https://firefox-source-docs.mozilla.org/devtools-us
 
 The script currently connects to the API using the username and password required by the mobile and web application and prints out a few values that I am interested in. It makes a lot of assumptions to simplify the code (only one power plant, only two PV panels).
 
-The login credentials can be provided via the `--username` and `--password` command line arguments, or via environment variables (`TALENT_USERNAME` and `TALENT_PASSWORD`).
+The login credentials can be provided via the `--username` and `--password` command line arguments, or via environment variables (`PYTALENT_USERNAME` and `PYTALENT_PASSWORD`).
 
 Example Output:
 ```
-./talent-monitoring.py -u user@example.com -p password
+./pytalent-monitor.py -u user@example.com -p password
 Status: ready
 StationName: priwatt priWall duo
 TotalActivePower(W): 192.0
@@ -37,7 +37,7 @@ The script can also generate JSON output by using the ``--json`` command line ar
 
 Example Output:
 ```
- ./talent-monitoring.py -u user@example.com -p password --json
+ ./pytalent-monitor.py -u user@example.com -p password --json
 {
     "Status": "ready",
     "StationName": "priwatt priWall duo",

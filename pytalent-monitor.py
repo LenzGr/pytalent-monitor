@@ -16,7 +16,7 @@ class AuthenticationError(Exception):
     pass
 
 def get_credentials():
-    parser = argparse.ArgumentParser(description="Talent Monitoring Script")
+    parser = argparse.ArgumentParser(description="pyTalent - Talent Solar Monitoring Script")
     parser.add_argument('-u', '--username', required=False, help="Username to log in")
     parser.add_argument('-p', '--password', required=False, help="Password to log in")
     parser.add_argument('--json', action='store_true', help="Return output as JSON object")
@@ -25,8 +25,8 @@ def get_credentials():
     if args.username and args.password:
         return args.username, args.password, args.json
 
-    username = args.username or os.environ.get('TALENT_USERNAME')
-    password = args.password or os.environ.get('TALENT_PASSWORD')
+    username = args.username or os.environ.get('PYTALENT_USERNAME')
+    password = args.password or os.environ.get('PYTALENT_PASSWORD')
     if username and password:
         return username, password, args.json
 
