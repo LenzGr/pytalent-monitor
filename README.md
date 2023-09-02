@@ -61,7 +61,7 @@ I use this script as an opportunity to brush up on my (admittedly lousy) Python 
 My final goal is to be able to visualize these metrics in a [Home Assistant Dashboard](https://www.home-assistant.io/dashboards/), but this requires a number of additional steps that I need to learn more about:
 
 - [ ] [Add more useful values to the output](https://github.com/LenzGr/talent-monitoring/issues/2)
-- [ ] [Convert the script to use object-oriented programming paradigms](https://github.com/LenzGr/talent-monitoring/issues/1)
+- [X] [Convert the script to use object-oriented programming paradigms](https://github.com/LenzGr/talent-monitoring/issues/1)
 - [ ] [Convert the script into a proper Python module/package](https://github.com/LenzGr/talent-monitoring/issues/3)
 - [ ] Publish the Python Module on the [Python Package Index](https://pypi.org/)
 - [ ] Create a [Home Assistant Integration](https://www.home-assistant.io/integrations/) that uses the module
