@@ -20,17 +20,38 @@ Example Output:
 ```
 ./talent-monitoring.py -u user@example.com -p password
 Status: ready
-Station Name: priwatt priWall duo
-Total Active Power (W): 184.0
-Daily energy (Wh): 410.0
-Monthly energy (Wh): 45250.0
-Yearly energy (Wh): 94950.0
-Panel1 Voltage (V): 33.3
-Panel1 Current (A): 2.19
-Panel1 Power (W): 73.2
-Panel2 Voltage (V): 32.9
-Panel2 Current (A): 2.05
-Panel2 Power (W): 67.8
+StationName: priwatt priWall duo
+TotalActivePower(W): 192.0
+DailyEnergy(Wh): 2490.0
+MonthlyEnergy(Wh): 5020.0
+YearlyEnergy(Wh): 107460.0
+Panel1Voltage(V): 33.4
+Panel1Current(A): 4.67
+Panel1Power(W): 156.0
+Panel2Voltage(V): 34.4
+Panel2Current(A): 1.28
+Panel2Power(W): 44.1
+```
+
+The script can also generate JSON output by using the ``--json`` command line argument.
+
+Example Output:
+```
+ ./talent-monitoring.py -u user@example.com -p password --json
+{
+    "Status": "ready",
+    "StationName": "priwatt priWall duo",
+    "TotalActivePower(W)": 192.0,
+    "DailyEnergy(Wh)": 2490.0,
+    "MonthlyEnergy(Wh)": 5020.0,
+    "YearlyEnergy(Wh)": 107460.0,
+    "Panel1Voltage(V)": 33.4,
+    "Panel1Current(A)": 4.67,
+    "Panel1Power(W)": 156.0,
+    "Panel2Voltage(V)": 34.4,
+    "Panel2Current(A)": 1.28,
+    "Panel2Power(W)": 44.1
+}
 ```
 
 ## Next Steps
