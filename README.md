@@ -71,6 +71,7 @@ If you have any experience in performing these steps, I gladly accept pull reque
 Some other projects/resources to study in order to achieve this goal include:
 
 * [tsun-talent-monitoring](https://github.com/asciidisco/tsun-talent-monitoring) by [@asciidisco](https://github.com/asciidisco) - a Node.js project / Docker container that pulls data from Talent Monitoring cloud and converts it into a digestible JSON structure for consumption via HTTP/REST
+* [tsun-gen3-proxy](https://github.com/s-allius/tsun-gen3-proxy) - A proxy for TSUN Gen 3 Micro-Inverters for easy MQTT/Home-Assistant integration
 * [pyAdax](https://github.com/Danielhiversen/pyAdax) by [@Danielhiversen](https://github.com/Danielhiversen/)
 
 ## LICENSE
