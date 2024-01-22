@@ -83,15 +83,19 @@ class TalentSolarMonitor:
                 monthEnergy = power_data['monthEnergy']
                 yearEnergy = power_data['yearEnergy']
 
-            data = self.get_data(endpoint=f"system/station/selectLayoutComponents?powerStationGuid={powerStationGuid}")
+            data = self.get_data(endpoint=f"tools/device/selectDeviceInverter")
             if data:
-                components = data['data']['components'][0]
-                pv1Voltage = components['pv1Voltage']
-                pv1Current = components['pv1Current']
-                pv1Power = components['pv1Power']
-                pv2Voltage = components['pv2Voltage']
-                pv2Current = components['pv2Current']
-                pv2Power = components['pv2Power']
+                deviceGuid = data['rows'][0]['deviceGuid']
+
+            data = self.get_data(endpoint=f"tools/device/selectDeviceInverterInfo?deviceGuid={deviceGuid}")
+            if data:
+                pv = data['data']['pv']
+                pv1Voltage = pv[0]['voltage']
+                pv1Current = pv[0]['current']
+                pv1Power = pv[0]['power']
+                pv2Voltage = pv[1]['voltage']
+                pv2Current = pv[1]['current']
+                pv2Power = pv[1]['power']
 
             result = {
                 "Status": status,
