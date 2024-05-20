@@ -18,7 +18,7 @@ The login credentials can be provided via the `--username` and `--password` comm
 
 Example Output:
 ```
-./pytalent-monitor.py -u user@example.com -p password
+hatch run pyTalentMonitor/__init__.py -u user@example.com -p password
 Status: ready
 StationName: priwatt priWall duo
 TotalActivePower(W): 192.0
@@ -37,7 +37,7 @@ The script can also generate JSON output by using the ``--json`` command line ar
 
 Example Output:
 ```
- ./pytalent-monitor.py -u user@example.com -p password --json
+ hatch run pyTalentMonitor/__init__.py -u user@example.com -p password --json
 {
     "Status": "ready",
     "StationName": "priwatt priWall duo",

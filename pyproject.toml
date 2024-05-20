@@ -1,0 +1,42 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "pyTalentMonitor"
+description = "Gather data from the www.talent-monitoring.com REST API."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+keywords = ['talent', 'tsun']
+authors = [
+  { name = "Lenz Grimmer", email = "lenz.grimmer+github@mailbox.org" },
+]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: Implementation :: PyPy",
+]
+dependencies = [
+  "requests"
+ ]
+dynamic = ["version"]
+
+[project.urls]
+Documentation = "https://github.com/LenzGr/pytalent-monitor/blob/main/README.md"
+Issues = "https://github.com/LenzGr/pytalent-monitor/issues"
+Source = "https://github.com/LenzGr/pytalent-monitor"
+
+[tool.hatch.version]
+path = "pyTalentMonitor/__about__.py"
+
+[tool.hatch.envs.default]
+dependencies = [
+]
+
+[[tool.hatch.envs.test.matrix]]
+python = ["310", "311"]

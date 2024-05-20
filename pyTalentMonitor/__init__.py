@@ -12,25 +12,26 @@ logging.basicConfig(level=logging.INFO)
 BASE_URL = "https://www.talent-monitoring.com/prod-api"
 TIMEZONE = "+02:00"
 
+
 class AuthenticationError(Exception):
     pass
 
+
 class TalentSolarMonitor:
     def __init__(self, username=None, password=None, return_json=False):
-        self.username = username or os.environ.get('PYTALENT_USERNAME')
-        self.password = password or os.environ.get('PYTALENT_PASSWORD')
+        self.username = username or os.environ.get("PYTALENT_USERNAME")
+        self.password = password or os.environ.get("PYTALENT_PASSWORD")
         self.return_json = return_json
         self.token = None
 
     def get_credentials(self):
         if not self.username or not self.password:
-            raise ValueError("Credentials not provided via command line arguments or environment variables.")
+            raise ValueError(
+                "Credentials not provided via command line arguments or environment variables."
+            )
 
     def login(self):
-        login_data = {
-            "username": self.username,
-            "password": self.password
-        }
+        login_data = {"username": self.username, "password": self.password}
         response = requests.post(f"{BASE_URL}/login", json=login_data)
         response_data = response.json()
         if "token" in response_data:
@@ -47,9 +48,7 @@ class TalentSolarMonitor:
     def get_data(self, endpoint):
         if not self.token:
             self.login()
-        headers = {
-            "Authorization": f"Bearer {self.token}"
-        }
+        headers = {"Authorization": f"Bearer {self.token}"}
         response = requests.get(f"{BASE_URL}/{endpoint}", headers=headers)
 
         if response.status_code == 401:  # Unauthorized, token might be expired
@@ -69,33 +68,37 @@ class TalentSolarMonitor:
 
         data = self.get_data(endpoint="system/station/list")
         if data:
-            first_station = data['rows'][0]
-            status = first_station['status']
-            stationName = first_station['stationName']
-            powerStationGuid = first_station['powerStationGuid']
+            first_station = data["rows"][0]
+            status = first_station["status"]
+            stationName = first_station["stationName"]
+            powerStationGuid = first_station["powerStationGuid"]
             logging.debug("GUID: %s", powerStationGuid)
 
-            data = self.get_data(endpoint=f"system/station/getPowerStationByGuid?powerStationGuid={powerStationGuid}&timezone={TIMEZONE}")
+            data = self.get_data(
+                endpoint=f"system/station/getPowerStationByGuid?powerStationGuid={powerStationGuid}&timezone={TIMEZONE}"
+            )
             if data:
-                power_data = data['data']
-                totalActivePower = power_data['totalActivePower']
-                dayEnergy = power_data['dayEnergy']
-                monthEnergy = power_data['monthEnergy']
-                yearEnergy = power_data['yearEnergy']
+                power_data = data["data"]
+                totalActivePower = power_data["totalActivePower"]
+                dayEnergy = power_data["dayEnergy"]
+                monthEnergy = power_data["monthEnergy"]
+                yearEnergy = power_data["yearEnergy"]
 
             data = self.get_data(endpoint=f"tools/device/selectDeviceInverter")
             if data:
-                deviceGuid = data['rows'][0]['deviceGuid']
+                deviceGuid = data["rows"][0]["deviceGuid"]
 
-            data = self.get_data(endpoint=f"tools/device/selectDeviceInverterInfo?deviceGuid={deviceGuid}")
+            data = self.get_data(
+                endpoint=f"tools/device/selectDeviceInverterInfo?deviceGuid={deviceGuid}"
+            )
             if data:
-                pv = data['data']['pv']
-                pv1Voltage = pv[0]['voltage']
-                pv1Current = pv[0]['current']
-                pv1Power = pv[0]['power']
-                pv2Voltage = pv[1]['voltage']
-                pv2Current = pv[1]['current']
-                pv2Power = pv[1]['power']
+                pv = data["data"]["pv"]
+                pv1Voltage = pv[0]["voltage"]
+                pv1Current = pv[0]["current"]
+                pv1Power = pv[0]["power"]
+                pv2Voltage = pv[1]["voltage"]
+                pv2Current = pv[1]["current"]
+                pv2Power = pv[1]["power"]
 
             result = {
                 "Status": status,
@@ -118,11 +121,16 @@ class TalentSolarMonitor:
                 for key, value in result.items():
                     print(f"{key}: {value}")
 
+
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="pyTalent - Talent Solar Monitoring Script")
-    parser.add_argument('-u', '--username', required=False, help="Username to log in")
-    parser.add_argument('-p', '--password', required=False, help="Password to log in")
-    parser.add_argument('--json', action='store_true', help="Return output as JSON object")
+    parser = argparse.ArgumentParser(
+        description="pyTalent - Talent Solar Monitoring Script"
+    )
+    parser.add_argument("-u", "--username", required=False, help="Username to log in")
+    parser.add_argument("-p", "--password", required=False, help="Password to log in")
+    parser.add_argument(
+        "--json", action="store_true", help="Return output as JSON object"
+    )
     args = parser.parse_args()
 
     talent_monitor = TalentSolarMonitor(args.username, args.password, args.json)
