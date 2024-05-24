@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
 import argparse
+import asyncio
 import json
 import logging
 import os
-import requests
+
+from aiohttp import ClientSession
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -18,9 +20,16 @@ class AuthenticationError(Exception):
 
 
 class TalentSolarMonitor:
-    def __init__(self, username=None, password=None, return_json=False):
+    def __init__(
+        self,
+        username: str = None,
+        password: str = None,
+        session: ClientSession = None,
+        return_json: bool = False,
+    ):
         self.username = username or os.environ.get("PYTALENT_USERNAME")
         self.password = password or os.environ.get("PYTALENT_PASSWORD")
+        self.session = session
         self.return_json = return_json
         self.token = None
 
@@ -30,51 +39,50 @@ class TalentSolarMonitor:
                 "Credentials not provided via command line arguments or environment variables."
             )
 
-    def login(self):
+    async def login(self):
         login_data = {"username": self.username, "password": self.password}
-        response = requests.post(f"{BASE_URL}/login", json=login_data)
-        response_data = response.json()
+        response = await self.session.post(f"{BASE_URL}/login", json=login_data)
+        response_data = await response.json()
         if "token" in response_data:
             self.token = response_data["token"]
             logging.debug("Login successful - received token: %s", self.token)
         else:
-            logging.error("Login failed. Got status code %s", response.status_code)
+            logging.error("Login failed. Got status code %s", response.status)
             raise AuthenticationError("Authentication failed")
 
-    def refresh_token(self):
+    async def refresh_token(self):
         logging.debug("Token expired. Refreshing token...")
         self.login()
 
-    def get_data(self, endpoint):
+    async def get_data(self, endpoint):
         if not self.token:
             self.login()
         headers = {"Authorization": f"Bearer {self.token}"}
-        response = requests.get(f"{BASE_URL}/{endpoint}", headers=headers)
-
-        if response.status_code == 401:  # Unauthorized, token might be expired
+        response = await self.session.get(f"{BASE_URL}/{endpoint}", headers=headers)
+        if response.status == 401:  # Unauthorized, token might be expired
             self.refresh_token()
             headers["Authorization"] = f"Bearer {self.token}"
-            response = requests.get(f"{BASE_URL}/{endpoint}", headers=headers)
+            response = await self.session.get(f"{BASE_URL}/{endpoint}", headers=headers)
 
-        if response.status_code == 200:
-            return response.json()
+        if response.status == 200:
+            return await response.json()
         else:
-            logging.error("Failed to fetch data. Status Code: %s", response.status_code)
+            logging.error("Failed to fetch data. Status Code: %s", response.status)
             return None
 
-    def fetch_solar_data(self):
+    async def fetch_solar_data(self):
         self.get_credentials()
-        self.login()
+        await self.login()
 
-        data = self.get_data(endpoint="system/station/list")
-        if data:
+        data = await self.get_data(endpoint="system/station/list")
+        if data and "rows" in data and len(data["rows"]) > 0:
             first_station = data["rows"][0]
             status = first_station["status"]
             stationName = first_station["stationName"]
             powerStationGuid = first_station["powerStationGuid"]
             logging.debug("GUID: %s", powerStationGuid)
 
-            data = self.get_data(
+            data = await self.get_data(
                 endpoint=f"system/station/getPowerStationByGuid?powerStationGuid={powerStationGuid}&timezone={TIMEZONE}"
             )
             if data:
@@ -84,11 +92,11 @@ class TalentSolarMonitor:
                 monthEnergy = power_data["monthEnergy"]
                 yearEnergy = power_data["yearEnergy"]
 
-            data = self.get_data(endpoint=f"tools/device/selectDeviceInverter")
+            data = await self.get_data(endpoint=f"tools/device/selectDeviceInverter")
             if data:
                 deviceGuid = data["rows"][0]["deviceGuid"]
 
-            data = self.get_data(
+            data = await self.get_data(
                 endpoint=f"tools/device/selectDeviceInverterInfo?deviceGuid={deviceGuid}"
             )
             if data:
@@ -122,6 +130,14 @@ class TalentSolarMonitor:
                     print(f"{key}: {value}")
 
 
+async def main(username: str, password: str, return_json: bool):
+    async with ClientSession() as session:
+        talent_monitor = TalentSolarMonitor(username, password, session, return_json)
+        result = await talent_monitor.fetch_solar_data()
+        if result:
+            print(result)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
         description="pyTalent - Talent Solar Monitoring Script"
@@ -133,7 +149,4 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    talent_monitor = TalentSolarMonitor(args.username, args.password, args.json)
-    result = talent_monitor.fetch_solar_data()
-    if result:
-        print(result)
+    asyncio.run(main(args.username, args.password, args.json))
