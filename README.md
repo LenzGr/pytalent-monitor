@@ -4,7 +4,7 @@
 
 Our small home PV (a [priWatt priWall Duo](https://priwatt.de/stecker-solaranlagen/fassade/priwall-duo/SW10354.1)) came with a Tsuness TSOL-MS800 inverter that only shares its metrics with a proprietary cloud service hosted on https://www.talent-monitoring.com/. We either need to use their web application or a mobile app to understand how our solar power plant is performing.
 
-`pytalent-monitor.py` is a simple Python script that I hacked together to explore the Talent Monitoring REST API that is used by the vendor's mobile and web applications.
+`pyTalentMonitor` is a simple Python script that I hacked together to explore the Talent Monitoring REST API that is used by the vendor's mobile and web applications.
 
 **Note: This software is not affiliated with or supported by Tsuness or any other company involved in this product.**
 
@@ -18,7 +18,7 @@ The login credentials can be provided via the `--username` and `--password` comm
 
 Example Output:
 ```
-hatch run pyTalentMonitor/__init__.py -u user@example.com -p password
+python pyTalentMonitor/__init__.py -u user@example.com -p password
 Status: ready
 StationName: priwatt priWall duo
 TotalActivePower(W): 192.0
@@ -37,7 +37,7 @@ The script can also generate JSON output by using the ``--json`` command line ar
 
 Example Output:
 ```
- hatch run pyTalentMonitor/__init__.py -u user@example.com -p password --json
+ python pyTalentMonitor/__init__.py -u user@example.com -p password --json
 {
     "Status": "ready",
     "StationName": "priwatt priWall duo",
@@ -62,9 +62,9 @@ My final goal is to be able to visualize these metrics in a [Home Assistant Dash
 
 - [ ] [Add more useful values to the output](https://github.com/LenzGr/talent-monitoring/issues/2)
 - [X] [Convert the script to use object-oriented programming paradigms](https://github.com/LenzGr/talent-monitoring/issues/1)
-- [ ] [Convert the script into a proper Python module/package](https://github.com/LenzGr/talent-monitoring/issues/3)
+- [X] [Convert the script into a proper Python module/package](https://github.com/LenzGr/talent-monitoring/issues/3)
 - [ ] Publish the Python Module on the [Python Package Index](https://pypi.org/)
-- [ ] Create a [Home Assistant Integration](https://www.home-assistant.io/integrations/) that uses the module
+- [X] Create a [Home Assistant Integration](https://www.home-assistant.io/integrations/) that uses the module (Note: there is one under development here: [ha-talent-monitor](https://github.com/StephanU/ha-talent-monitor) by [@StephanU](https://github.com/StephanU/)
 
 If you have any experience in performing these steps, I gladly accept pull requests and suggestions!
 
