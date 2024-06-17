@@ -92,6 +92,10 @@ class TalentSolarMonitor:
                 monthEnergy = power_data["monthEnergy"]
                 yearEnergy = power_data["yearEnergy"]
 
+            data = await self.get_data(endpoint="tools/device/selectDeviceCollector")
+            if data:
+                signalStrength = data["rows"][0]["signalStrength"]
+            
             data = await self.get_data(endpoint=f"tools/device/selectDeviceInverter")
             if data:
                 deviceGuid = data["rows"][0]["deviceGuid"]
@@ -107,10 +111,16 @@ class TalentSolarMonitor:
                 pv2Voltage = pv[1]["voltage"]
                 pv2Current = pv[1]["current"]
                 pv2Power = pv[1]["power"]
+                inverterTemp = data["data"]["inverterTemp"]
+                current = data["data"]["phase"][0]["current"]
+                voltage = data["data"]["phase"][0]["voltage"]
+                frequency = data["data"]["phase"][0]["frequency"]
 
             result = {
                 "Status": status,
                 "StationName": stationName,
+                "SignalStrength(%)": signalStrength,
+                "InverterTemp(C)": inverterTemp,
                 "TotalActivePower(W)": totalActivePower,
                 "DailyEnergy(Wh)": dayEnergy,
                 "MonthlyEnergy(Wh)": monthEnergy,
@@ -121,6 +131,9 @@ class TalentSolarMonitor:
                 "Panel2Voltage(V)": pv2Voltage,
                 "Panel2Current(A)": pv2Current,
                 "Panel2Power(W)": pv2Power,
+                "LineCurrent(A)": current,
+                "LineVoltage(V)": voltage,
+                "LineFrequency(Hz)": frequency,
             }
 
             if self.return_json:
